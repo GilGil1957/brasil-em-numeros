@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brasil em Números</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Quanto o Brasil poderia economizar com juros menores? Simule a redução da Selic e compare com o Bolsa Família. Dados oficiais do Banco Central e do MDS.">
+<meta name="theme-color" content="#13263A">
+<meta property="og:title" content="Quanto o Brasil poderia economizar com juros menores?">
+<meta property="og:description" content="Calcule você mesmo: simulação com base na sensibilidade da dívida à Selic publicada pelo Banco Central.">
+<meta property="og:type" content="website">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<!--INLINE-STYLES-->
+
+<header class="hero">
+  <div class="wrap">
+    <div class="bar">
+      <div class="logo">Brasil em Números</div>
+      <button class="ghost" id="btnTheme" type="button" aria-label="Alternar tema claro ou escuro">Tema</button>
+    </div>
+
+    <div class="ask">
+      <h1 class="q">Quanto o Brasil poderia economizar com juros menores?</h1>
+      <p class="q-sub">Calcule você mesmo!</p>
+    </div>
+
+    <div class="left">
+      <div class="ctrl">
+        <div class="ctrl-top">
+          <span class="ctrl-label">Redução da Selic</span>
+          <span class="cut num" id="cutVal">−1,0 p.p.</span>
+        </div>
+        <input type="range" id="cut" min="0" max="5" step="0.1" value="1" aria-label="Redução da Selic em pontos percentuais">
+        <div class="ticks"><span>0 p.p.</span><span id="tickMax">−5 p.p.</span></div>
+        <p class="from-to" id="fromTo"></p>
+        <div class="chips" id="chips" role="group" aria-label="Cenários prontos"></div>
+      </div>
+
+      <div class="result" aria-live="polite">
+        <span class="result-label">Economia estimada com juros</span>
+        <div class="result-val" id="resVal"></div>
+        <p class="result-sub" id="resSub"></p>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="equiv" aria-live="polite">
+        <p class="equiv-lead" style="font-weight:600;color:#13263A">Com esse valor,</p>
+        <div class="equiv-big" id="eqBig"></div>
+        <p class="equiv-lead" id="eqLead"></p>
+        <div class="meter" id="meter" role="img"><i id="meterFill"></i></div>
+        <div class="meter-cap"><span id="meterL"></span><span id="meterR"></span></div>
+        <p class="equiv-alt" id="eqAlt"></p>
+        <p class="equiv-alt" style="display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;justify-content:space-between">
+          <span id="medioTag" style="font-size:.8rem"></span>
+          <button type="button" id="reajToggle" style="border:1px solid #C9D3DD;background:transparent;border-radius:999px;padding:5px 10px;font-size:.78rem;color:#13263A"></button>
+        </p>
+      </div>
+
+      <button class="share" id="btnShare" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+        Compartilhar este resultado
+      </button>
+      <textarea class="sharebox" id="shareBox" readonly hidden aria-label="Texto para compartilhar"></textarea>
+
+      <div class="caveat">
+        <p><b>Simulação, não previsão.</b> O cálculo usa a sensibilidade da dívida líquida à Selic publicada pelo Banco Central: quanto o custo anual dos juros muda se a taxa ficar 1 ponto mais baixa durante 12 meses. Não é economia imediata nem dinheiro automaticamente disponível para programas sociais.</p>
+        <p><a href="#metodologia">Como calculamos</a></p>
+      </div>
+      <p class="src-line" id="sensLine"></p>
+    </div>
+  </div>
+</header>
+
+<nav class="deep-nav" aria-label="Seções">
+  <div class="wrap wide"><span>Aprofunde</span><a href="#hoje">Números de hoje</a><a href="#graficos">Gráficos</a><a href="#metodologia">Metodologia</a><a href="#fontes">Fontes</a></div>
+</nav>
+
+<main class="wrap wide">
+  <p id="fatal" class="lead" hidden style="padding-block:20px;color:var(--cost)">Não foi possível carregar os dados oficiais agora. Tente de novo em alguns minutos.</p>
+
+  <section id="hoje" aria-labelledby="h-hoje">
+    <div class="eyebrow">Números de hoje</div>
+    <h2 id="h-hoje">O que já está sendo pago</h2>
+    <p class="lead">Valores observados, sem simulação. Cada cartão traz a fonte e o período de referência.</p>
+    <div class="grid" id="cards"></div>
+    <div class="panel" style="margin-top:12px">
+      <h3>Cenários de redução, lado a lado</h3>
+      <p class="sub" style="margin-top:4px">Sensibilidade oficial do BCB, taxa reduzida mantida por 12 meses, benefício médio oficial.</p>
+      <div class="tbl-wrap"><table id="tblRed"></table></div>
+    </div>
+  </section>
+
+  <section id="graficos" aria-labelledby="h-g">
+    <div class="eyebrow">Gráficos</div>
+    <h2 id="h-g">Dez anos em perspectiva</h2>
+    <div class="charts">
+      <div class="panel"><h3>Juros, Bolsa Família e a economia simulada</h3><div class="chart-box"><canvas id="cVs" aria-label="Comparação em barras"></canvas></div><p class="chart-src">Juros nominais de 12 meses (BCB), Bolsa Família anualizado (MDS) e a economia do cenário escolhido no simulador.</p></div>
+      <div class="panel"><h3>Juros nominais em 12 meses (% do PIB)</h3><div class="chart-box"><canvas id="cJuros"></canvas></div><p class="chart-src">BCB, SGS 5727 − SGS 5793 (resultado nominal menos primário).</p></div>
+      <div class="panel"><h3>Selic efetiva (% ao ano)</h3><div class="chart-box"><canvas id="cSelic"></canvas></div><p class="chart-src">BCB, SGS 4189, média do mês anualizada.</p></div>
+      <div class="panel"><h3>Dívida Bruta do Governo Geral (% do PIB)</h3><div class="chart-box"><canvas id="cDbgg"></canvas></div><p class="chart-src">BCB, SGS 13762.</p></div>
+    </div>
+  </section>
+
+  <section id="metodologia" aria-labelledby="h-m">
+    <div class="eyebrow">Metodologia</div>
+    <h2 id="h-m">Como o simulador calcula</h2>
+    <details open><summary>A economia estimada</summary><div class="body">
+      <p>Todo mês o Banco Central publica, na nota de Estatísticas Fiscais, as elasticidades da dívida pública. Uma delas diz quanto a dívida líquida do setor público muda se a Selic ficar 1 ponto percentual mais baixa durante doze meses. Esse número já leva em conta quanto da dívida reage de fato à Selic: títulos pós-fixados, operações compromissadas, a parte que vence no período e os ativos do governo que também rendem Selic.</p>
+      <span class="formula">economia anual = redução (p.p.) × sensibilidade BCB
+ago/2026: 1 p.p. → R$ 71,5 bi (0,54 p.p. do PIB)
+0,1 p.p. → R$ 7,15 bi</span>
+      <p>O BCB informa que o impacto é simétrico para alta e queda. A conta é linear: funciona bem para variações moderadas e perde precisão em cortes grandes, que mudam também câmbio, inflação e o tamanho da própria dívida.</p>
+      <p>A conta nunca multiplica a dívida bruta inteira pela Selic. Boa parte dela é prefixada ou corrigida pela inflação e só muda de custo quando vence.</p>
+    </div></details>
+    <details><summary>A equivalência com o Bolsa Família</summary><div class="body">
+      <span class="formula">famílias por 12 meses = economia ÷ (benefício médio × 12)
+meses de programa     = economia ÷ (famílias × benefício médio)</span>
+      <p>O benefício médio padrão é o oficial mais recente divulgado pelo MDS (folha de setembro de 2026). Desde a folha de outubro o programa teve reajuste de 15,04%; o valor médio pós-reajuste é estimativa do governo até a folha fechada ser divulgada, e o simulador permite usá-lo identificado como estimativa.</p>
+    </div></details>
+    <details><summary>O que a simulação não diz</summary><div class="body"><ul>
+      <li>Não é previsão. Ninguém sabe qual será a Selic; o simulador só mostra a ordem de grandeza.</li>
+      <li>Não é dinheiro em caixa. Juros menores reduzem o crescimento da dívida; não liberam automaticamente recursos no orçamento.</li>
+      <li>A Selic é definida pelo Copom para controlar a inflação. O simulador não estima efeitos sobre inflação, crescimento ou arrecadação.</li>
+      <li>A redução precisa durar 12 meses para chegar ao valor mostrado.</li>
+      <li>Os juros nominais observados incluem o resultado dos swaps cambiais do BCB, que não depende da Selic.</li>
+    </ul></div></details>
+  </section>
+
+  <section id="fontes" aria-labelledby="h-f">
+    <div class="eyebrow">Fontes</div>
+    <h2 id="h-f">De onde vêm os números</h2>
+    <div class="tbl-wrap"><table style="min-width:520px"><thead><tr><th>Indicador</th><th>Fonte</th><th>Atualização</th></tr></thead><tbody>
+      <tr><td>Sensibilidade à Selic</td><td>BCB, nota Estatísticas Fiscais, seção 3</td><td>mensal, conferência manual</td></tr>
+      <tr><td>Selic meta</td><td>BCB SGS 432</td><td>após cada Copom</td></tr>
+      <tr><td>Selic efetiva</td><td>BCB SGS 4189</td><td>mensal</td></tr>
+      <tr><td>Juros nominais 12m</td><td>BCB SGS 5727 − 5793, × SGS 4382</td><td>mensal</td></tr>
+      <tr><td>DBGG R$ / % PIB</td><td>BCB SGS 13761 / 13762</td><td>mensal</td></tr>
+      <tr><td>Bolsa Família</td><td>MDS, folha mensal</td><td>mensal</td></tr>
+    </tbody></table></div>
+    <p class="lead"><a href="https://www.bcb.gov.br/content/estatisticas/hist_estatisticasfiscais/202609_Texto_de_estatisticas_fiscais.pdf" target="_blank" rel="noopener">Nota do BCB de 30/09/2026 (PDF)</a> · <a href="https://dadosabertos.bcb.gov.br/" target="_blank" rel="noopener">Dados abertos do BCB</a></p>
+  </section>
+
+  <footer>
+    <p>Projeto independente, educativo e apartidário, com código aberto. Usa apenas dados públicos oficiais e não representa nenhum órgão de governo, partido ou empresa.</p>
+    <p id="status"></p>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<!--INLINE-DATA-->
+<script src="assets/econ.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  if ("serviceWorker" in navigator && location.protocol === "https:") {
+    navigator.serviceWorker.register("sw.js").catch(function () {});
+  }
+</script>
+</body>
+</html>
