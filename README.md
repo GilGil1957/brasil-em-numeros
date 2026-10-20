@@ -1,5 +1,9 @@
 # Brasil em Números
 
+[![Brasil em Números: quanto o Brasil poderia economizar com juros menores?](assets/og-cover.png)](https://gilgil1957.github.io/brasil-em-numeros/)
+
+**▶ Acesse o simulador: [gilgil1957.github.io/brasil-em-numeros](https://gilgil1957.github.io/brasil-em-numeros/)**
+
 **Quanto o Brasil poderia economizar com juros menores? Calcule você mesmo.**
 
 Ferramenta pública de educação econômica, independente e apartidária. O visitante escolhe uma redução hipotética da Selic e vê:
