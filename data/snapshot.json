@@ -1,5 +1,5 @@
 {
- "validado_em": "2026-10-22",
+ "validado_em": "2026-10-23",
  "indicadores": {
   "dbgg_pct": {
    "valor": 82.87,
@@ -39,9 +39,9 @@
    "fonte": "Banco Central — SGS 5793"
   },
   "pib_12m_mi": {
-   "valor": 13340676.3,
-   "ref": "2026-08",
-   "publicado": "2026-09-30",
+   "valor": 13402023.7,
+   "ref": "2026-09",
+   "publicado": "2026-10-23",
    "periodicidade_dias": 31,
    "fonte": "Banco Central — SGS 4382"
   },
